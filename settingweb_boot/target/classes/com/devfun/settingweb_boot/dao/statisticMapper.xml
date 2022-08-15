@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.devfun.settingweb_boot.dao.StatisticMapper">
+ 
+    <select id="selectYearLogin" parameterType="string" resultType="hashMap">
+        select count(*) as totCnt
+        from statistc.requestinfo ri
+        where left(ri.createDate, 2) = #{year};
+    </select>
+    <select id="selectMonthLogin" parameterType="string" resultType="hashMap">
+    	select count(*) as totCnt
+    	from statistc.requestinfo ri
+    	where substring(ri.createDate,3,2) = #{month};
+    </select>
+    <select id="selectDayLogin" parameterType="string" resultType="hashMap">
+    	select count(*) as totCnt
+    	from statistc.requestinfo ri
+    	where substring(ri.createDate,5,2) = #{day};
+    </select>
+     <select id="selectAvgLogin" parameterType="string" resultType="hashMap">
+    	select count(*) as totCnt
+    	from statistc.requestinfo ri
+    	where left(ri.createDate, 2) = #{year} and substring(ri.createDate,3,2) = #{month} and substring(ri.createDate,5,2) = #{day};
+    </select>
+    <select id="selectOrganMonthLogin" parameterType="string" resultType="hashMap">
+    	select count(*) as totCnt
+    	from statistc.requestinfo ri
+    	join statistc.user u
+    	where u.HR_ORGAN = #{organ} and u.userID = ri.userID and substring(ri.createDate,3,2) = #{month};
+    </select>
+    <select id="selectUnHolidayLogin" parameterType="string" resultType="hashMap">
+   		select count(*) as totCnt 
+   		from statistc.requestinfo where substring(createDate,3,2) = #{month} and left(createDate,2) = #{year} and substring(createDate,1,6) not in (select substring(createDate,1,6) from statistc.holiday);
+    </select>
+    
+</mapper>
